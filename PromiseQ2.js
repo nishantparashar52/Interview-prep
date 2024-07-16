@@ -3,11 +3,12 @@
 //     let promises = 0
 //     urls.forEach(url => {
 //         promises++;
-//         fetch(url).then(response => response.json()).then(response => {
+//         results = results.then(url).then(response => {
 //             results.push(response)
-//             if(urls.length === promises) res(results)
+//             return results
 //         })
 //     })
+//     return results
 // }
 
 
@@ -24,18 +25,32 @@ PromiseSequence([
 function PromiseCreator(i, time, text) {
     return new Promise((res, rej) => {
         setTimeout(() => {
-            return res(console.log(`text ${text} at ${i}`))
+            return res(`${`text ${text} at ${i}`}`)
         }, time)
     })
 }
 
 
-async function PromiseSequence(arrayOfPromise) {
+// async function PromiseSequence(arrayOfPromise) {
+//     let results = []
+//     for(let promiseFunc of arrayOfPromise) {
+//         const result =  await promiseFunc()
+//         results.push(result)
+//     }
+//     return results;
+// }
+
+
+function PromiseSequence(arrayOfPromise) {
     let results = []
-    for(let i of arrayOfPromise) {
-        return await arrayOfPromise[i]
-    }
-    return results;
+    let sequence = Promise.resolve()
+    arrayOfPromise.forEach(promiseFunc => {
+        sequence = sequence.then(promiseFunc).then(result => {
+            results.push(result)
+            return results
+        })
+    })
+    return sequence
 }
 
 

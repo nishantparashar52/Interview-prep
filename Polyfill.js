@@ -90,26 +90,27 @@ const tasks = [
 //   .then((values) => console.log(`done`, values));
 
 
-
-function PromisePool(tasks, poolLimit) {
-   return new Promise((resolve) => {
-       let index = 0, inProgress = 0;
-       function helper() {
-           if (index === tasks.length && inProgress === 0) {
-               return resolve('tasks resolved')
-           }
-           if (inProgress < poolLimit && index < tasks.length) {
-               inProgress++
-               tasks[index++]().then(() => {
-                   inProgress--
-                console.log(`index ${index - 1}`)
-                   helper()
-               })
-           }
-       }
-       helper()
-   })
-}
+function promisePool(funcs, max){
+    let index = 0, inProgress = 0, responses = [];
+  
+    return new Promise((resolve, reject) => {
+  
+      function helper() {
+        while(inProgress < max && index < funcs.length) {
+       
+          inProgress++
+          funcs[index]().then(val => {
+            inProgress--
+            responses.push(val)
+            if(inProgress === 0 && index === funcs.length) return resolve(responses)
+            helper()
+        }).catch(reject)
+          index++
+        }
+      }
+      helper()
+    })
+  }
 
 function promisePool1(tasks) {
     return new Promise((resolve) => {
@@ -129,6 +130,13 @@ function promisePool1(tasks) {
         helper()
     })
  }
+
+ promisePool([() => sleep(1000), () => sleep(400), () => sleep(100), () => sleep(500)])
+  .then((val) => console.log(`done ${val}`))
+
+  function PromisePool2(tasks) {
+    return Promise.all(tasks.map((task, index) => task(index)));
+  }
 
  function PromisePool2(tasks) {
     return Promise.all(tasks.map((task, index) => task(index)));
