@@ -53,8 +53,8 @@ m1()
 // console.timeEnd('square end');
 
 const sleep = (t) => new Promise(res => setTimeout(res, t));
-PromisePool([() => sleep(5000), () => sleep(400), () => sleep(100), () => sleep(500)], 3)
-  .then((val) => console.log(`done ${val}`)) 
+// PromisePool([() => sleep(5000), () => sleep(400), () => sleep(100), () => sleep(500)], 3)
+//   .then((val) => console.log(`done ${val}`)) 
 
 const tasks = [
     (index) => new Promise((resolve) => {

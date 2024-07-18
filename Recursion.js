@@ -7,6 +7,18 @@ function ReadObj(o) {
     }
     return ''
   }
+
+
+
+  function ReadObjValue(obj) {
+    for(let i in obj) {
+      if(typeof obj[i] === 'object') {
+        return ReadObjValue(obj[i])
+      }
+      return obj[i]
+    }
+    return ''
+  }
   const object = {
     A: {
       B: {

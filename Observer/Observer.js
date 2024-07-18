@@ -10,6 +10,6 @@ export default class Observer {
         this.observers.splice(index, 1);
     }
     notify(message) {
-        this.observers.forEach(observer => observer.update(message))
+        this.observers.forEach(observer => observer(message))
     }
 }
